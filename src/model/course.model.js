@@ -69,26 +69,41 @@ Course.multiCreate = (newCourse, result) => {
 };
 
 Course.updateByID = (id, course, result) => {
-  db.query(
-    "UPDATE course SET name = ?, description = ?, price = ? WHERE id = ?",
-    [course.name, course.description, course.price, id],
-    (err, res) => {
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
-      }
+  let queryString = `UPDATE course SET `;
+  let queryArray = [];
 
-      if (res.length === 0) {
-        // id 결과가 없을 시
-        result({ kind: "not_found" }, null);
-        return;
-      }
+  if (course.name) {
+    queryString += "name = ? ";
+    queryArray.push(course.name);
+  }
+  if (course.description) {
+    queryString += "name = ? ";
+    queryArray.push(course.name);
+  }
+  if (course.price) {
+    queryString += "name = ? ";
+    queryArray.push(course.name);
+  }
 
-      console.log("update course: ", { id: id, ...course });
-      result(null, { id: id, ...course });
+  queryString += " WHERE id = ?";
+  queryArray.push(id);
+
+  db.query(queryString, queryArray, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
     }
-  );
+
+    if (res.length === 0) {
+      // id 결과가 없을 시
+      result({ kind: "not_found" }, null);
+      return;
+    }
+
+    console.log("update course: ", { id: id, ...course });
+    result(null, { id: id, ...course });
+  });
 };
 
 Course.openByID = (id, result) => {
