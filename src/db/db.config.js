@@ -1,18 +1,18 @@
 const mysql = require("mysql2");
 
 const connection = mysql.createConnection({
-  host: "127.0.0.1",
-  user: "root",
-  password: "1234",
-  port: +3306,
-  database: "inflab",
+	host: "127.0.0.1",
+	user: "root",
+	password: "1234",
+	port: +3306,
+	database: "inflab",
 });
 
 connection.connect(function (err) {
-  if (err) throw err;
-  console.log("Connected");
+	if (err) throw err;
+	console.log("Connected");
 
-  const student = `CREATE TABLE student (
+	const student = `CREATE TABLE student (
       id INT AUTO_INCREMENT PRIMARY KEY,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -20,14 +20,14 @@ connection.connect(function (err) {
       nickname VARCHAR(255) NOT NULL
     );`;
 
-  const teacher = `CREATE TABLE teacher (
+	const teacher = `CREATE TABLE teacher (
         id INT AUTO_INCREMENT PRIMARY KEY,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         name VARCHAR(50) UNIQUE NOT NULL
         );`;
 
-  const course = `CREATE TABLE course (
+	const course = `CREATE TABLE course (
         id INT AUTO_INCREMENT PRIMARY KEY,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -40,7 +40,7 @@ connection.connect(function (err) {
         FOREIGN KEY(teacher) REFERENCES teacher(id)      
         )`;
 
-  const course_student = `CREATE TABLE course_student (
+	const course_student = `CREATE TABLE course_student (
         id INT AUTO_INCREMENT PRIMARY KEY,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -50,37 +50,37 @@ connection.connect(function (err) {
         FOREIGN KEY(student) REFERENCES student(id) ON DELETE cascade
         )`;
 
-  // student
-  connection.query(student, function (err, result) {
-    if (err) {
-      console.log("이미 student table이 존재합니다.");
-      //   console.log(err);
-    } else console.log("create table student ");
-  });
+	// student
+	connection.query(student, function (err, result) {
+		if (err) {
+			console.log("이미 student table이 존재합니다.");
+			//   console.log(err);
+		} else console.log("create table student ");
+	});
 
-  // teacher
-  connection.query(teacher, function (err, result) {
-    if (err) {
-      console.log("이미 teacher table이 존재합니다.");
-      //   console.log(err);
-    } else console.log("create table teacher ");
-  });
+	// teacher
+	connection.query(teacher, function (err, result) {
+		if (err) {
+			console.log("이미 teacher table이 존재합니다.");
+			//   console.log(err);
+		} else console.log("create table teacher ");
+	});
 
-  // course
-  connection.query(course, function (err, result) {
-    if (err) {
-      console.log("이미 course table이 존재합니다.");
-      //   console.log(err);
-    } else console.log("create table course ");
-  });
+	// course
+	connection.query(course, function (err, result) {
+		if (err) {
+			console.log("이미 course table이 존재합니다.");
+			//   console.log(err);
+		} else console.log("create table course ");
+	});
 
-  // course_student
-  connection.query(course_student, function (err, result) {
-    if (err) {
-      console.log("이미 course_student table이 존재합니다.");
-      //   console.log(err);
-    } else console.log("create table course_student ");
-  });
+	// course_student
+	connection.query(course_student, function (err, result) {
+		if (err) {
+			console.log("이미 course_student table이 존재합니다.");
+			//   console.log(err);
+		} else console.log("create table course_student ");
+	});
 });
 
 module.exports = connection;
