@@ -50,11 +50,12 @@ connection.connect(function (err) {
         FOREIGN KEY(student) REFERENCES student(id) ON DELETE cascade
         )`;
 
+	const insert_teacher = `INSERT INTO teacher (name) value ("황교수"), ("안교수"), ("박교수")`;
+
 	// student
 	connection.query(student, function (err, result) {
 		if (err) {
 			console.log("이미 student table이 존재합니다.");
-			//   console.log(err);
 		} else console.log("create table student ");
 	});
 
@@ -62,15 +63,21 @@ connection.connect(function (err) {
 	connection.query(teacher, function (err, result) {
 		if (err) {
 			console.log("이미 teacher table이 존재합니다.");
-			//   console.log(err);
-		} else console.log("create table teacher ");
+		} else {
+			console.log("create table teacher ");
+			// 강사를 테이블 생성단계에서 추가
+			connection.query(insert_teacher, function (err, result) {
+				if (err) {
+					console.log("이미 해당 강사가 존재합니다.");
+				} else console.log("강사 생성 성공");
+			});
+		}
 	});
 
 	// course
 	connection.query(course, function (err, result) {
 		if (err) {
 			console.log("이미 course table이 존재합니다.");
-			//   console.log(err);
 		} else console.log("create table course ");
 	});
 
@@ -78,7 +85,6 @@ connection.connect(function (err) {
 	connection.query(course_student, function (err, result) {
 		if (err) {
 			console.log("이미 course_student table이 존재합니다.");
-			//   console.log(err);
 		} else console.log("create table course_student ");
 	});
 });
