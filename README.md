@@ -11,6 +11,7 @@ MVC 패턴을 사용하려고 노력했습니다.
 ### Create
 
 URL : POST http://localhost:3000/student/create
+<br>
 Body : {
 "email":"원하는 이메일",
 "nickname":"원하는 닉네임"
@@ -19,11 +20,13 @@ Body : {
 ### READ (Find One)
 
 URL : GET http://localhost:3000/student?id={검색하고싶은 학생 ID}
+<br>
 Query Params 사용.
 
 ### DELETE
 
 URL : DELETE http://localhost:3000/student
+<br>
 Body : {
 "id":"삭제하고싶은 학생 ID",
 }
@@ -31,26 +34,28 @@ Body : {
 ### CREATE(ENROLMENT 강의 등록)
 
 URL : POST http://localhost:3000/student/enrolment
+<br>
 Body : {
-"data":[
-{
-"course_id" : "강의 ID",
-"student_id" : "학생 ID"
-},
-{
-"course_id" : "강의 ID",
-"student_id" : "학생 ID"
-}
-]
-}
-
-등록할 강의를 배열로 입력받아 작동.
+"data":[  
+{. 
+"course_id" : "강의 ID",  
+"student_id" : "학생 ID". 
+},  
+{  
+"course_id" : "강의 ID",  
+"student_id" : "학생 ID". 
+}. 
+]. 
+}. 
+<br>
+등록할 강의를 배열로 입력받아 작동. 
 
 ## Student
 
 ### CREATE
 
 URL : POST http://localhost:3000/course/create
+<br>
 Body : {
 "name":"강의 이름",
 "description":"강의 설명",
