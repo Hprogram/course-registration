@@ -95,17 +95,17 @@ exports.delete = (req, res) => {
 };
 
 exports.findOne = (req, res) => {
-	Course.findOneByID(req.params.id, (err, data) => {
+	Course.findOneByID(req.query.id, (err, data) => {
 		if (err) {
 			if (err.kind === "not_found") {
 				res.status(404).send({
-					message: `Not found Course findOne with id ${req.params.id}.`,
+					message: `Not found Course findOne with id ${req.query.id}.`,
 				});
 			} else {
 				res.status(500).send({
 					message:
 						"Error retrieving Course findOne with id " +
-						req.params.id,
+						req.query.id,
 				});
 			}
 		} else {
@@ -140,22 +140,234 @@ exports.findOne = (req, res) => {
 	});
 };
 
-exports.find = (req, res) => {
-	Course.findByStudentID(req.params.student_id, (err, data) => {
-		if (err) {
-			if (err.kind === "not_found") {
-				res.status(404).send({
-					message: `Not found Course findOne with id ${req.params.id}.`,
-				});
-			} else {
-				res.status(500).send({
-					message:
-						"Error retrieving Course findOne with id " +
-						req.params.id,
-				});
-			}
-		} else {
-			res.send(data);
-		}
-	});
+exports.find = async (req, res) => {
+	if (req.query.student_id && !req.query.course && !req.query.teacher) {
+		await this.findStudent(req, res);
+	} else if (
+		req.query.course &&
+		!req.query.student_id &&
+		!req.query.teacher
+	) {
+		await this.findCourse(req, res);
+	} else if (
+		req.query.teacher &&
+		!req.query.student_id &&
+		!req.query.course
+	) {
+		await this.findTeacher(req, res);
+	} else {
+		res.send({
+			error: "강의명/ 강사명/ 수강생 ID 중 한가지 값만 입력해주세요.",
+		});
+	}
 };
+
+exports.defaultFind = async (req, res) => {
+	let result = [];
+
+	const resData = await Course.find();
+
+	if (resData.length <= 0) {
+		res.status(404).send("강의가 존재하지 않습니다.");
+	}
+
+	await Promise.all(
+		resData.map((el) => {
+			const key = result.filter((k) => {
+				return el.id === k.id;
+			})[0];
+
+			if (!key) {
+				el.student_count = 1;
+				result.push(el);
+			} else {
+				key.student_count += 1;
+			}
+		})
+	);
+
+	const list = result.filter((el) => {
+		return el.open === 1;
+	});
+
+	const divisions = await division(
+		list,
+		req.query.page_count,
+		req.query.page_number,
+		req.query.category
+	).then(async (data) => {
+		data.list = await DeletestudentId(data.list);
+
+		return data;
+	});
+
+	res.send(divisions);
+};
+
+exports.findStudent = async (req, res) => {
+	// if (!req.params.student_id) {
+	// 	res.status(500).send("")
+	// }
+	let result = [];
+
+	const resData = await Course.find();
+
+	if (resData.length <= 0) {
+		res.status(404).send("강의가 존재하지 않습니다.");
+	}
+
+	await Promise.all(
+		resData.map((el) => {
+			const key = result.filter((k) => {
+				return el.id === k.id;
+			})[0];
+
+			if (!key) {
+				el.student_count = 1;
+				result.push(el);
+			} else {
+				key.student_count += 1;
+			}
+		})
+	);
+
+	const list = result.filter((el) => {
+		return el.open === 1 && el.student_id === Number(req.query.student_id);
+	});
+
+	const divisions = await division(
+		list,
+		req.query.page_count,
+		req.query.page_number,
+		req.query.category
+	).then(async (data) => {
+		data.list = await DeletestudentId(data.list);
+		return data;
+	});
+
+	res.send(divisions);
+};
+
+exports.findTeacher = async (req, res) => {
+	let result = [];
+
+	const resData = await Course.find();
+
+	if (resData.length <= 0) {
+		res.status(404).send("강의가 존재하지 않습니다.");
+	}
+
+	await Promise.all(
+		resData.map((el) => {
+			const key = result.filter((k) => {
+				return el.id === k.id;
+			})[0];
+
+			if (!key) {
+				el.student_count = 1;
+				result.push(el);
+			} else {
+				key.student_count += 1;
+			}
+		})
+	);
+
+	const list = result.filter((el) => {
+		return el.open === 1 && el.teacher === req.query.teacher;
+	});
+
+	const divisions = await division(
+		list,
+		req.query.page_count,
+		req.query.page_number,
+		req.query.category
+	).then(async (data) => {
+		data.list = await DeletestudentId(data.list);
+		return data;
+	});
+
+	res.send(divisions);
+};
+
+exports.findCourse = async (req, res) => {
+	let result = [];
+
+	const resData = await Course.find();
+
+	if (resData.length <= 0) {
+		res.status(404).send("강의가 존재하지 않습니다.");
+	}
+
+	await Promise.all(
+		resData.map((el) => {
+			const key = result.filter((k) => {
+				return el.id === k.id;
+			})[0];
+
+			if (!key) {
+				el.student_count = 1;
+				result.push(el);
+			} else {
+				key.student_count += 1;
+			}
+		})
+	);
+
+	const list = result.filter((el) => {
+		return el.open === 1 && el.name === req.query.course;
+	});
+
+	const divisions = await division(
+		list,
+		req.query.page_count,
+		req.query.page_number,
+		req.query.category
+	).then(async (data) => {
+		data.list = await DeletestudentId(data.list);
+		return data;
+	});
+
+	res.send(divisions);
+};
+
+async function division(list, n, page_number, category) {
+	if (!n) {
+		n = 5;
+	}
+
+	if (category) {
+		list = list.filter((el) => {
+			return el.category === category;
+		});
+	}
+
+	const tmp = [];
+	const len = list.length;
+	const cnt = Math.ceil(len / n);
+	for (let i = 0; i <= cnt; i++) {
+		// console.log(list[i]);
+		tmp.push(list.splice(0, n));
+	}
+
+	if (page_number && page_number <= cnt + 1 && page_number >= 1) {
+		return {
+			list: tmp[page_number - 1],
+			current_page: page_number,
+			total_page: cnt,
+		};
+	} else {
+		return {
+			list: tmp[0],
+			current_page: 1,
+			total_page: cnt,
+		};
+	}
+}
+
+async function DeletestudentId(list) {
+	const data = list.map((el) => {
+		delete el.student_id;
+		return el;
+	});
+	return data;
+}
