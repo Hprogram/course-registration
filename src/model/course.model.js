@@ -229,45 +229,43 @@ Course.findOneByID = (id, result) => {
 	);
 };
 
-Course.findByStudentID = (id, result) => {
-	db.query(
-		`SELECT 
+Course.find = (result) => {
+	return new Promise((resolve, reject) => {
+		db.query(
+			`SELECT 
     c.id, 
-    c.name as c_name,
+    c.name as name,
     c.created_at,
-    c.description, 
     c.category, 
     c.price, 
     c.open,
-    s.nickname,
-    cs.created_at as cs_created_at,
-    t.name as teacher_name
+	t.name as teacher,
+	s.id as student_id
     FROM course as c 
-    INNER JOIN course_student as cs 
+    LEFT JOIN course_student as cs 
     ON c.id = cs.course 
-    INNER JOIN student as s 
-    ON cs.student = s.id  
     INNER JOIN teacher as t
     ON c.teacher = t.id
-    WHERE s.id = ?`,
-		id,
-		(err, res) => {
-			if (err) {
-				console.log("error: ", err);
-				result(err, null);
-				return;
-			}
+	LEFT JOIN student as s
+    ON cs.student = s.id`,
+			(err, res) => {
+				if (err) {
+					console.log("error: ", err);
+					resolve(err, null);
+					return;
+				}
 
-			if (res.length === 0) {
-				// id 결과가 없을 시
-				result({ message: "course not_found" }, null);
-				return;
-			}
+				if (res.length === 0) {
+					// id 결과가 없을 시
+					resolve({ message: "course not_found" }, null);
+					return;
+				}
 
-			console.log("find By Student ID course with id: ", id);
-			result(null, res);
-		}
-	);
+				console.log("find course ");
+				resolve(res);
+			}
+		);
+	});
 };
 
 module.exports = Course;

@@ -17,23 +17,6 @@ const Course_Student = function (cs) {
 };
 
 Course_Student.create = (newCS, result) => {
-	// db.query(
-	//     "SELECT * FROM course WHERE id = ?",newCS.course,(err,res)=>{
-	//         if (err) {
-	//             console.log("error: ", err);
-	//             result({ message: "해당 teacher가 존재하지 않습니다." }, null);
-	//             return;
-	//           }
-
-	//           if (res.length === 0) {
-	//             // id 결과가 없을 시
-	//             result({ message: "teacher not_found" }, null);
-	//             return;
-	//           }
-
-	//     }
-	// )
-
 	return new Promise((resolve, reject) => {
 		db.query(
 			"SELECT * FROM course_student WHERE course = ? AND student = ?",
