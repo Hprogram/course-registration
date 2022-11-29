@@ -1,4 +1,10 @@
+MVC 패턴을 사용하려고 노력했습니다.
+
 # API 사용법 (Localhost 기준)
+
+## ERD
+
+![스크린샷 2022-11-29 오후 10 11 09](https://user-images.githubusercontent.com/77596160/204538128-89f76921-2e58-4db8-865f-3214bd6100ea.png)
 
 ## Student
 
