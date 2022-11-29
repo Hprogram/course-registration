@@ -4,7 +4,7 @@ const { json, urlencoded } = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 
-const db = require("../src/db/db.config.js");
+// const db = require("../src/db/db.config.js");
 const courseRouter = require("./router/course.router.js");
 const studentRouter = require("./router/student.router.js");
 const teacherRouter = require("./router/teacher.router.js");
