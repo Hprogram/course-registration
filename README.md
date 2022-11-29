@@ -36,7 +36,7 @@ Body : {
 URL : POST http://localhost:3000/student/enrolment
 <br>
 Body : {
-"data":[<br>{"course_id" : "강의 ID","student_id" : "학생 ID"},<br>{"course_id" : "강의 ID","student_id" : "학생 ID"}<br>]<br>} 
+"data":[<br>{"course_id" : "강의 ID","student_id" : "학생 ID"},<br>{"course_id" : "강의 ID","student_id" : "학생 ID"}<br>]} 
 <br>
 등록할 강의를 배열로 입력받아 작동. 
 
