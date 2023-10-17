@@ -1,3 +1,6 @@
+No Framework
+목표 : 프레임워크를 사용하지 않고 구현
+
 MVC 패턴을 사용하려고 노력했습니다.
 
 # API 사용법 (Localhost 기준)
